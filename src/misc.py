@@ -4,6 +4,9 @@ import math as m
 
 
 def get_normal():
+  """
+  Generate random real number sampled from standard normal distribution
+  """
   return np.random.normal()
 
 
@@ -28,6 +31,16 @@ def generateStockPrices(initial_price, drift, sigma, timestep=.0001, data_count=
   return (timestamps, prices)
 
 
+def plotStocks(stocks):
+  for stock_x, stock_y in stocks:
+    plt.plot(stock_x, stock_y)
+
+
+def pltFullScreen():
+  manager = plt.get_current_fig_manager()
+  manager.resize(1920, 1080)
+
+
 if __name__ == "__main__":
   stocks = []
   stock_count = 100
@@ -38,8 +51,6 @@ if __name__ == "__main__":
     stocks.append(generateStockPrices(
       100, drift, volatility, timestep=.001, data_count=3000))
 
-  for stock_x, stock_y in stocks:
-    plt.plot(stock_x, stock_y)
-  manager = plt.get_current_fig_manager()
-  manager.resize(1920, 1080)
+  plotStocks(stocks)
+  pltFullScreen()
   plt.show()
