@@ -1,4 +1,6 @@
-#include <concepts>
+#pragma once
+
+#include <cstddef>
 #include <cstdint>
 
 // Assumptions/rules for the price :
@@ -8,11 +10,15 @@ struct Price {
   // Now, the question is, how do we store the price ?
 };
 
+constexpr std::size_t TRADING_DAYS_PER_YEAR = 252;
+
 struct MyTime {
   using tick_t = std::uint64_t;
 
   tick_t _ticks;
   constexpr static tick_t TICKS_PER_SECONDS{1'000'000'000};
+  constexpr static tick_t TICKS_PER_TRADING_YEAR{TICKS_PER_SECONDS * 86400 *
+                                                 TRADING_DAYS_PER_YEAR};
 
   MyTime() : _ticks(0) {};
   MyTime(tick_t ticks) : _ticks(ticks) {}
