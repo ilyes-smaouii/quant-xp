@@ -27,5 +27,5 @@ protected:
 
 std::pair<std::vector<my_time_t>, std::vector<price_t>>
 simulateAssetPrices(price_t initial_price, interest_t drift,
-                    volatility_t volatility, my_time_t ticks_per_step,
+                    volatility_t volatility, my_time_t time_step,
                     std::size_t step_count, NormalSampler &normal_sampler);

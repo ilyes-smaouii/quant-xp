@@ -17,7 +17,8 @@ simulateAssetPrices(price_t initial_price, interest_t drift,
   constexpr tick_t TPS = my_time_t::TICKS_PER_SECONDS;
   constexpr tick_t TPY = TPS * 86400 * TRADING_DAYS_PER_YEAR;
 
-  const price_t annualized_time_step = static_cast<price_t>(time_step.ticks()) / TPY;
+  const price_t annualized_time_step =
+      static_cast<price_t>(time_step.ticks()) / TPY;
 
   my_time_t curr_ts{0};
   price_t curr_price{initial_price};
@@ -29,9 +30,10 @@ simulateAssetPrices(price_t initial_price, interest_t drift,
 
   for (std::size_t i{1}; i < step_count; i++) {
     curr_ts += time_step;
-    curr_price *=
-        std::exp((annualized_time_step) * (drift - 0.5 * volatility * volatility) +
-                 (volatility * std::sqrt(annualized_time_step) * normal_sampler.sample()));
+    curr_price *= std::exp((annualized_time_step) *
+                               (drift - 0.5 * volatility * volatility) +
+                           (volatility * std::sqrt(annualized_time_step) *
+                            normal_sampler.sample()));
     timestamps.push_back(curr_ts);
     prices.push_back(curr_price);
   }
