@@ -5,7 +5,14 @@
 #include <utility>
 #include <vector>
 
+real_number_t normalCdf(real_number_t x) {
+  return (1 + std::erf(x / std::sqrt(2))) / 2;
+}
+
 NormalSampler::NormalSampler() : _rd(), _generator(_rd()), _nd(0, 1) {}
+
+NormalSampler::NormalSampler(real_number_t mean, real_number_t sigma)
+    : _rd(), _generator(_rd()), _nd(mean, sigma) {}
 
 NormalSampler::num_t NormalSampler::sample() { return _nd(_generator); }
 

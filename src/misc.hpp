@@ -8,14 +8,17 @@
 
 #include "common/common_types.hpp"
 
-price_t sampleFromNormal();
+// price_t sampleFromNormal();
+
+real_number_t normalCdf(real_number_t x);
 
 class NormalSampler {
 public:
-  using num_t = double;
+  using num_t = real_number_t;
   using seed_t = std::chrono::system_clock::rep;
 
   NormalSampler();
+  NormalSampler(real_number_t mean, real_number_t sigma);
 
   num_t sample();
 
