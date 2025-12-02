@@ -1,19 +1,22 @@
 #pragma once
 
 #include "../common/common_types.hpp"
-#include "../misc.hpp"
-
+#include "../simulation/misc.hpp"
+#include <string>
 
 struct BlackScholesInputs {
+public:
   BlackScholesInputs();
-  BlackScholesInputs(price_t curr_price, price_t strike_price,
+  BlackScholesInputs(price_t asset_price, price_t strike_price,
                      my_time_t maturity, real_number_t volatility,
                      real_number_t risk_free_interest_rate);
+
+  std::string toStr() const;
 
   static BlackScholesInputs
   generateRandomInstance(const BlackScholesInputs &hint,
                          real_number_t shift_mean = 0,
-                         real_number_t shift_sigma = 1) {
+                         real_number_t shift_sigma = .25) {
     NormalSampler my_sampler{shift_mean, shift_sigma};
     auto asset_price_shift{my_sampler.sample()},
         strike_price_shift{my_sampler.sample()},
@@ -33,8 +36,8 @@ struct BlackScholesInputs {
   */
   static BlackScholesInputs generateRandomInstance() {
     price_t typical_price{100}, strike_price{100};
-    my_time_t typical_maturity = {my_time_t::TICKS_PER_TRADING_YEAR};
-    typical_maturity *= 1;
+    my_time_t typical_maturity{my_time_t::TICKS_PER_TRADING_YEAR * 5};
+    // typical_maturity *= 5;
     real_number_t typical_volatility{0.20}, typical_interest{0.07};
     auto typical_inputs =
         BlackScholesInputs{typical_price, strike_price, typical_maturity,
@@ -42,6 +45,7 @@ struct BlackScholesInputs {
     return BlackScholesInputs::generateRandomInstance(typical_inputs);
   }
 
+  // ATTRIBUTES
   price_t _asset_price{};
   price_t _strike_price{};
   my_time_t _maturity{};
@@ -49,4 +53,4 @@ struct BlackScholesInputs {
   real_number_t _risk_free_interest_rate{};
 };
 
-price_t getOptionPrice(const BlackScholesInputs &bs_inputs);
+price_t assessOptionPrice(const BlackScholesInputs &bs_inputs);

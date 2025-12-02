@@ -18,11 +18,11 @@ set(SRC_COMMON
 )
 
 set(SRC_MISC
-    misc.cpp
+    simulation/misc.cpp
 )
 
 set(SRC_PRICING
-    pricing/option_pricing.cpp
+    pricing/black_scholes.cpp
 )
 
 add_library(quantxp_lib
@@ -56,5 +56,5 @@ target_link_libraries(test_pricing PRIVATE quantxp_lib)
 if (MSVC)
     target_compile_options(quantxp_lib PRIVATE /W4)
 else()
-    target_compile_options(quantxp_lib PRIVATE -Wall -Wextra -Wpedantic)
+    target_compile_options(quantxp_lib PRIVATE -O3 -Wall -Wextra -Wpedantic)
 endif()

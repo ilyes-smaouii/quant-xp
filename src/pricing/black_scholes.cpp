@@ -1,24 +1,38 @@
 #include <cmath>
+#include <format>
 
+#include "black_scholes.hpp"
 
-#include "option_pricing.hpp"
+BlackScholesInputs::BlackScholesInputs() {
+  *this = BlackScholesInputs::generateRandomInstance();
+}
 
-BlackScholesInputs::BlackScholesInputs() { *this = BlackScholesInputs::generateRandomInstance(); }
-
-BlackScholesInputs::BlackScholesInputs(price_t curr_price, price_t strike_price,
-                                       my_time_t maturity,
+BlackScholesInputs::BlackScholesInputs(price_t asset_price,
+                                       price_t strike_price, my_time_t maturity,
                                        real_number_t volatility,
                                        real_number_t risk_free_interest_rate)
-    : _asset_price(curr_price), _strike_price(strike_price),
+    : _asset_price(asset_price), _strike_price(strike_price),
       _maturity(maturity), _volatility(volatility),
       _risk_free_interest_rate(risk_free_interest_rate) {}
 
-price_t getOptionPrice(const BlackScholesInputs &bs_inputs) {
+std::string BlackScholesInputs::toStr() const {
+  return std::format("Asset price : {},\tStrike price : {}\n"
+                     "Risk-free interest rate : {} %,\tVolatility : {} %\n"
+                     "Maturity : {} years",
+                     _asset_price, _strike_price,
+                     _risk_free_interest_rate * 100, _volatility * 100,
+                     _maturity.toTradingYears());
+}
+
+price_t assessOptionPrice(const BlackScholesInputs &bs_inputs) {
+  // Setup
   const auto &s = bs_inputs._asset_price;
   const auto &k = bs_inputs._strike_price;
   const auto &sigma = bs_inputs._volatility;
-  const auto t = bs_inputs._maturity.yearly();
+  const auto t = bs_inputs._maturity.toTradingYears();
   const auto &r = bs_inputs._risk_free_interest_rate;
+  //
+  // Actual calculations
   const auto d1 = (std::log(s / k) + (r + (sigma * sigma / 2)) * t) /
                   (sigma * std::sqrt(t));
   // const auto d2 = (std::log(s / k) + (r - (sigma * sigma / 2)) * t) /
